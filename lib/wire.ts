@@ -1,25 +1,4 @@
-// The client wires and the one upstream wire this baseline speaks.
-//
-// The trial's client calls the entry as an OpenAI service (POST /v1/chat/completions) or an Anthropic one
-// (POST /v1/messages), with a JSON body or with server-sent events. This baseline forwards both to a
-// provider on the openai wire and translates back:
-//
-//   - the OpenAI path passes the client's body (with the routed model's id) to the provider and streams
-//     the provider's JSON or SSE straight back, the way an OpenAI-compatible gateway does;
-//   - the Anthropic path rewrites the request to Chat Completions (system prompt, image blocks, tool
-//     definitions, tool results and tool choice included) and rewrites the provider's answer into a
-//     Messages object, or into the message_start / content_block_start / content_block_delta /
-//     content_block_stop / message_delta / message_stop event order, with the stop reason and the usage
-//     translated. Tool calls become tool_use blocks and input_json_delta events.
-//
-// The gemini and anthropic upstream wires are not implemented in this baseline (main.ts answers 501 for a
-// provider on either): a real entry needs their request and event shapes too, which is the biggest single
-// gap in this starter.
-//
-// Everything here is a pure function of its arguments: no clock and no randomness, so the same body and the
-// same provider answer give the same bytes on a replay. The two model listings use fixed timestamps for the
-// same reason: a `created` that moved between runs would be a nondeterministic document.
-
+// Optimized client-wire translation layer for Free Model Aggregator
 import { isRecord, type Json } from './providers.ts';
 
 /** One model the entry serves, as GET /v1/models lists it. */

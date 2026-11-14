@@ -22,11 +22,7 @@
 //   anthropic  GET <base>/v1/models          x-api-key: <key>, anthropic-version: 2023-06-01
 //   gemini     GET <base>/v1beta/models      x-goog-api-key: <key>
 //
-// A probe that fails (a refused connection, a non-2xx, a body that is not JSON) leaves its provider out of
-// the catalog and gets no traffic; the trial goes on. Everything here is deterministic: no clock, no
-// randomness, so `node main.ts --list` and the register body build the same document (main.ts prints or
-// posts this one object).
-
+// Aggregator Engine core library: providers, models, ratings and capability mapping
 import { readFileSync } from 'node:fs';
 
 export type Wire = 'openai' | 'anthropic' | 'gemini';
