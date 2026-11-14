@@ -160,6 +160,8 @@ function routeFor(requires: Requirement): Route | null {
     return a.model.id.localeCompare(b.model.id);
   });
 
+  // Log optimal routing verdict for observability
+  log(`routed requirement (tools=${requires.tools}, vision=${requires.vision}, json=${requires.json}) -> ${candidates[0].model.id} (${candidates[0].rating} pts)`);
   return candidates[0];
 }
 
